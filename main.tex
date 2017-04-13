@@ -1,0 +1,1388 @@
+\documentclass[11pt]{article}\topmargin 0mm
+% Set the page margins to 1 inch all around:
+\marginparwidth 0pt\marginparsep 0pt \topskip 0pt\headsep
+0pt\headheight 0pt \oddsidemargin 0in\evensidemargin 0in\textwidth
+6.5in \topmargin 0in\textheight 9in
+%\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{graphicx}%
+\usepackage{caption}
+\usepackage{xfrac}
+\usepackage{natbib}
+\usepackage{subcaption}
+\usepackage{color}
+%\usepackage{amsfonts}%
+%\usepackage{amssymb}
+%\usepackage{subfigure}
+%\usepackage{amsthm}
+%\usepackage{MnSymbol}
+%\usepackage{wasysym}
+%\usepackage{bm}
+\usepackage{multirow}
+%\usepackage{pifont}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{todonotes}
+
+%\newcommand{\cmark}{\ding{51}}
+%\newcommand{\xmark}{\ding{55}}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+\newtheorem{cor}{Corollary}
+
+\newcommand{\exclude}[1]{}
+
+%\linespread{2}
+%\setlength{\parskip}{1ex}
+%\parindent 0.2in
+ %\def\School {School }
+\title{An approximate Hypercube model for public service systems with co-located servers and multiple response}
+%\title{A Approximate Queueing Model with Multiple Servers per Location and Multi-Server Dispatches}
+%\def\titletwo{none}
+%\def\author{Sardar Ansari and Laura Albert McLay}
+%\def\submissiondate{May 1, 2016}
+
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+\begin{document}
+%\numberwithin{equation}{chapter} \numberwithin{figure}{chapter}
+%\numberwithin{table}{chapter}
+\newcommand{\dspace}{\renewcommand{\baselinestretch}{1.5}\small\normalsize}
+\newcommand{\sspace}{\renewcommand{\baselinestretch}{1.0}\small\normalsize}
+\def\baselinestretch{1.0}
+
+\author {Authors removed for peer review}
+\maketitle
+
+\normalsize
+
+\dspace
+
+\abstract{Spatial queueing models help to evaluate the design
+of public safety systems such as fire, emergency medical
+service, and police departments, where vehicles are sent to geographically
+dispersed calls for service.
+%
+We propose a new approximate Hypercube spatial queueing model
+that allows for multiple servers to be located at the same
+station as well as multiple servers to be dispatched to a
+single call. We introduce the $M[G]/M/s/s$ queueing model as an
+extension to the $M/M/s/s$ model which allows for a single
+customer to request multiple servers with a general discrete
+probability distribution $G$. We use the $M[G]/M/s/s$ queueing
+model to derive approximate formulas for the Hypercube spatial
+queueing outputs.
+%
+A simulation study validates the accuracy of the queueing
+approximations. Computational results suggest that the models
+are effective in evaluating the performance of emergency
+systems.
+
+\vspace{0.1in}\noindent \textbf{Keywords: } spatial queues;
+Hypercube model approximation; emergency response; emergency
+medical services}
+
+
+%\chapter{Queueing Model for Server Dispatching with Multiple Servers per Location and Multi-Server Dispatches}
+%\label{ch:queueing_model}
+
+%-----------------------------------------------------------------
+\section{Introduction}
+%\textbf{[First paragraph could be stronger. What is the motivation? It's not clear.]}
+Evaluating the performance of public safety systems is critical
+to ensure that effective care is provided to those in need. The
+speed of response is one of the primary performance measures
+for public safety systems such as fire and emergency medical
+services. This motivates the development of a model that can
+accurately and efficiently quantify performance measures such
+as the availability of each vehicle and the dispatch
+probabilities. Analytical models are needed to evaluate public
+safety systems when multiple vehicles are co-located at
+stations and when multiple vehicles are sent to the same call.
+However, most models in the literature assume that vehicles are
+located at distinct stations and that one vehicle is sent to
+each call. This paper addresses this gap in the literature and
+proposes a new model that lifts both of these assumptions.
+%
+{\color{blue}The proposed model can be used by public safety leaders to inform decisions such as vehicle location and district design decisions.
+%The model provides Approximate Hypercube models, such as the one proposed in this paper, could be used within an optimization procedure to identify potential system design alternatives, and then simulation can be used to further evaluate and compare the most promising alternatives \citep{Budge-etal-09}.
+}
+
+
+For several decades, spatial queueing models have supported the
+design and analysis of public safety systems. The methods used
+to evaluate the performance of an emergency system are usually
+based on exact and approximate Hypercube spatial queueing
+models. \citet{Larson74} provides an exact Hypercube model for
+capturing the statistical dependence between the vehicles
+serving an area using queueing methods. Computing the exact
+values for these queueing factors in spatial systems is
+computationally intractable due to the so-called ``curse of
+dimensionality.'' As a result, several approximation Hypercube
+methods have been proposed in the literature that are
+manageable in terms of size and complexity \citep{Larson75}.
+The Hypercube models have been used to inform a range of system design decisions in several real settings,
+including Boston, New York and Orlando, to analyze and study
+the travel times
+\citep{brandeau1986extending,larson1987travel,sacks1994orlando}.
+More recently, \citet{larson2004or} used the Hypercube model as
+a deployment model to respond to emergency situations such as
+terrorist attacks.
+
+Both the exact and approximate Hypercube models assume Poisson
+arrival rates, exponential service times that are independent
+of call locations, and with one vehicle assigned to each call.
+%Moreover, these models assume there is a pre-specified contingency table to represent the dispatching policy as we do in this paper.
+%Other studies that use the Hypercube model to build optimization models for server locations and assignment are \citep{chiyoshi2003note,saydam2003accurate,galvao2005towards}.
+Several papers lift the assumptions made in early Hypercube
+models. \citet{halpern1977accuracy} improves the accuracy of
+the Hypercube model by allowing server dependent service times.
+\citet{Jarvis85} further extends the Hypercube model
+approximation to allow for service times that depend on both
+the vehicle and the call locations.
+{\color{blue}
+Other extensions of the Hypercube model relax the
+assumptions of the original model or improve its computational
+complexity and are provided by \cite{chelst1979technical},
+\cite{larson1982police}, and \cite{mendoncca2001analysing}.
+\citet{geroliminis2009spatial} develop an exact Hypercube model
+with service times that depend on the responding vehicle, and
+they embed the Hypercube model in a location model that seeks
+to minimize the mean response time subject to a
+coverage level target. Later, \citet{boyaci2015approximation} formulate an aggregate Hypercube queueing model where each server has three states: available, busy with intradistrict calls, and busy with interdistrict calls. However, the size of the state space increases from $2^n$ as in the \citet{Larson74} model to $3^n$.  \citet{desouza2015incorporating} develop an exact Hypercube model that considers different priorities in a finite-capacity queue.
+}
+%\citet{chelst1979technical,larson1982police,mendoncca2001analysing}.
+%We extend the model in \citep{Budge-etal-09} to allow for co-located servers and multi-server dispatches.
+
+{\color{blue}
+Thus far, all models have assumed that exactly one vehicle is
+assigned to each call for service.
+A customer who requests $i$ servers can be thought as a batch (bulk) arrival of $i$ customers who each request one server in a $M^{(x)}/M/s/s$ batch arrival queueing system. However, in a batch arrival system customers may enter service one at a time and each server assigned to the batch of customer completes service separately. In this paper, we consider servers who complete service at the same time. Similarly, in a general batch queue where a group of customers arrive and are serviced in groups, the arrival group does not necessarily coincide with service group \citep{miller1959contribution}.}
+
+{\color{blue}
+A series of papers considers a multi-server
+queueing system in which customers require a random number of servers.
+\citet{green1980queueing} explores a queueing system in which
+servers begin service simultaneously but become available
+independently. For the same system, \citet{seila1984waiting}
+derives the second moment of time a customer spends in queue.
+\citet{green1981comparing} compares an alternative service
+order disciplines to first-in-first-out (FIFO) under various degree of dependence
+among servers. \citet{brill1984queues} use a system point
+approach to derive the waiting time distribution for
+customers who need simultaneous service from a random number of
+servers. \citet{fletcher1986queueing} derive performance measures for a closed single node queueing system with multiple classes, where each class requires a different number of servers. Recently, \citet{vinayak2014study} analyze the system in which customers require a random number of servers with the queueing disciplines of retrial and preemptive priority. Unlike in our model, partial dispatch is not allowed in these papers, and therefore a customer cannot enter service until all required servers are available.
+}
+
+Few Hypercube spatial queueing models in the literature study
+the impact of multiple response, where more than one vehicle
+is assigned to a call.
+\citet{ChelstBarlach81} develop a
+model based on the Hypercube model that sends one or two
+vehicles to a single call. \citet{daskin1984multiple} study the
+distribution of the arrival time of the first vehicle that
+arrives at the scene when multiple vehicles are dispatched.
+\citet{McLay09} examines the issue of vehicle location when
+there is multiple response to prioritized calls.
+\citet{iannoni2007multiple} extend the Hypercube model by
+proposing a model that dispatches one, two, or three vehicles
+to a single call. Their model assumes a specific dispatching
+policy designed for emergency medical vehicles that operate on
+Brazilian highways. On the contrary, the approximate Hypercube
+model that is proposed in this paper is neither restricted by
+the number of vehicles dispatched, nor does it assume a
+particular dispatching policy.
+%Moreover, \citet{ChelstBarlach81} assume that the service times are
+%independent for the servers that are busy serving the same call.
+%This is not a realistic assumption and is relaxed in the proposed model.
+%Our queueing model also allows multiple servers to be co-located at the same station.
+
+
+{\color{blue}
+Backup coverage models are developed to optimally locate multiple servers while taking server unavailability into account. \citet{daskin1981hierarchical} formulate a hierarchical multiobjective program that locates emergency medical service vehicles. The primary goal is to find the minimum number of vehicles needed to cover all zones while the secondary objective is to maximize multiple coverage. \citet{daskin1983maximum} develops a maximum expected covering location problem that maximizes the number of calls covered under the assumption that each server has the same independent busy probability. \citet{hogan1986concepts} modify the model by Daskin and Stern to maximize the population receiving backup coverage. \citet{revelle1989maximum} maximize the proportion of demand that can be reached within a time standard with a given level of reliability. This approach is extended by \citet{MarianovRevelle96} to consider the dependencies between servers using a queueing model. Models that can approximate dispatch probabilities, such as the approximate Hypercube model formulated in this paper, can be used to facilitate comparison of multiple system design alternatives, for example, within an optimization model that locates servers and considers backup coverage.}
+
+%Another type of models that have been proposed for emergency
+%systems are the optimization models. The system administrators
+%often need to answer questions like how many servers are
+%required to cover the emergency calls in a certain area, where
+%should the servers be located in the area in order to minimize
+%the service times, and how should the servers be assigned to
+%the calls in order to achieve a certain coverage level. The aim
+%of these optimization models is to answer such questions and to
+%provide optimal solutions that can improve the efficacy of the
+%emergency systems. The early optimization models that were
+%proposed ignored the stochastic aspect of the system. Later
+%works tried to propose more realistic models by incorporating
+%the stochastic elements of the system. Some of these models
+%employed the queueing methods that estimate the stochastic
+%aspects of the system.
+
+%A review of these spatial queueing and optimization models will be presented later in this chapter.
+
+%In the remaining sections of this chapter, we discuss the aims
+%and motivations of this work and we provide a review of the
+%literature. In Chapter \ref{ch:max_exp_covering}, we introduce
+%a mixed integer programming model to optimize the dispatching
+%policy for the ambulances in an EMS model. Then, a queueing
+%model for analyzing the emergency systems with multi-server
+%dispatches is introduced in Chapter \ref{ch:queueing_model}.
+%Finally, the summary of the thesis and the future works are
+%presented in Chapter \ref{ch:summary_and_future_work}.
+
+
+%-----------------------------------------------------------------
+
+
+%Much of the previous work in approximate Hypercube spatial
+%queueing models has assumed one vehicle is dispatched to a call
+%and that there is one vehicle per station. While there are
+%several exceptions, no paper considers both of these issues.
+
+%------------------------------------------------------
+
+Much of the previous work in approximate Hypercube spatial
+queueing models assumes one vehicle is sent to a call and that
+there is one vehicle per station. There are two notable exceptions
+that allow for co-located servers.
+{\color{blue}
+\citet{burwell1993modeling} and \citet{Budge-etal-09} propose modifications to the Hypercube model approximation to accommodate vehicles co-located at a single station through
+``preference ties,'' i.e., when multiple vehicles are equally
+preferred to respond to a call. This model requires less
+computer time and storage than earlier models that accommodate
+preference ties.
+}
+%\citet{Budge-etal-09} propose an approximate Hypercube model that considers station-specific busy probabilities and explicitly allows multiple indistinguishable vehicles per location.
+We extend the model by \citet{Budge-etal-09} to
+accommodate multiple response, thus lifting both of the
+assumptions commonly found in the literature. To do so, we
+extend the $M/M/s/s$ loss model and introduce a $M[G]/M/s/s$
+model that allows multiple servers to serve a single call. The
+distribution of the number of servers that are requested for
+service per call is determined by the general discrete
+probability distribution $G$. We present a procedure to compute
+the steady-state probabilities for this model by 
+solving the balance equations. We use the $M[G]/M/s/s$ model to
+derive approximate formulas for the Hypercube spatial queueing
+outputs.
+
+We validate the proposed approximate Hypercube model using
+discrete event simulation. The results indicate that the
+proposed model can successfully approximate the queueing
+dynamics of an emergency system. The relative error between the
+results of the Hypercube model and that of the simulation is
+less than 2\% in most of the cases that we tested, which is
+comparable to other Hypercube models in the literature.
+We demonstrate that our model results in much smaller errors than the \citet{Budge-etal-09} model when applied to settings that require multiple response. Although the models that are proposed in this work are valid
+for any types of emergency systems, we focus on fire and
+emergency medical services (EMS) systems. {\color{blue} The notation that is used throughout this paper is summarized in Table \ref{tbl:symbols2}. The terms â€˜customerâ€™, â€˜locationâ€™ and â€˜customer locationâ€™ are used interchangeably depending on the context throughout this paper. It is assumed that a single customer is located at each geographical location.}
+
+This paper is organized as follows.
+%We first introduce the notation in this paper.
+We first introduce an iterative procedure to compute the
+steady-state probabilities for an $M[G]/M/s/s$ queueing model,
+which we define as an extension to the $M/M/s/s$ model with
+multiple response, where $G$ represents a general probability
+distribution for the number of servers that each incoming call
+requests. Then, we derive the expressions for the server
+utilizations and dispatch probabilities in Section
+\ref{sec:dispatch_probabilities} using the correction factors
+that are introduced in Section \ref{sec:correction_factors}. We
+integrate these results into an iterative procedure that
+computes the spatial queueing output measures for the dispatching
+models with multiple response. We discuss the simulation and
+data that are used to evaluate the proposed model and present
+the results of the evaluations in Section
+\ref{sec:simulation_and_results}. Finally, we offer concluding
+thoughts in Section \ref{sec:discussions}.
+
+
+
+%\subsection{Notation}
+%We start by introducing the notation that is used throughout
+%this chapter, shown in Table \ref{tbl:symbols2}. Several
+%additional parameters that are used once or twice to simplify
+%the formulation are not included in this list.
+
+%We often replace the index $i$ with $(k)j$ which indicates the $k^\text{th}$ preferred station for customer $j$. When we use $k$, it should be interpreted as the priority of station $i$ in the preference list of customer $j$ where $i$ and $j$ can be determined from the context.
+
+\sspace
+\begin{table}
+\footnotesize \centering \caption{Summary of the
+notation\label{tbl:symbols2}} {\begin{tabular}{c p{3.8in} c}
+\hline
+Symbol & \multicolumn{1}{c}{Description} & Domain \\
+\hline
+\multicolumn{3}{l}{\color{blue}\textbf{Sets and Indices} } \\
+\color{blue}$I$ & \color{blue}Set of stations, indexed by $i$. & \\
+\color{blue}$J$ & \color{blue}Set of customer locations, indexed by $j$. & \\
+\color{blue}$S$ & \color{blue}Set of $s$ servers, indexed by $l$ and $n$. & \\
+\multicolumn{3}{l}{\textbf{Inputs} } \\
+%$J$ & Set of all customer (demand) nodes. &  \\
+%$I$ & Set of all open stations. & \\
+$a_{ij}$ & Preference of server $i$ for responding to a call from customer location $j$ in the dispatching policy. & $i\in I$, $j\in J$ \\
+%$b_{kj}$ & $k$th preferred station for calls from node $j$ in the dispatching policy. & $k=1,...,|I|$, $j\in J$ \\
+$s$ & Total number of servers in the system. & \\
+$s_i$ & Number of servers at station $i$ ($\sum_{i\in I}s_i=s$). & $i\in I$ \\
+$s_{(k)j}$ & The number of servers at the $k^\text{th}$ priority station for customer $j$, i.e. $s_{(k)j}=s_i$ where $a_{ij}=k$. & $k=1,...,|I|$, $j\in J$ \\
+%$\lambda_j^H$ ($\lambda_j^L$) & Mean high-priority (low-priority) call arrival rate from node $j$, with $\lambda_j = \lambda_j^H+\lambda_j^L$. & $j\in J$ \\
+$\lambda_j$ & Call arrival rate for customer $j$. & $j\in J$ \\
+$\lambda$ & System-wide total call arrival rate with $\lambda = \sum_{j \in J} \lambda_j$. & \\
+$\mu$ & Service rate. & \\
+$\mu_j$ & Service rate for calls at location $j$. & \\
+$\tau$ & Mean service time, with $\tau=1/\mu$. & \\
+%$\tau_{ij}$ & Mean service time for calls originated from node $j$ and served by a server from station $i$. & $i\in I$, $j\in J$ \\
+%$\tau$ & System-wide mean service time. & \\
+$k$ & The priority of the current station $i$ responding to the current call from $j$, i.e., $k=a_{ij}$. & \\
+$z_k$ & The number of servers at the $k$ most preferred stations for the current call. & $k=1,...,|I|$\\
+$\varepsilon$ & Server utilization deviation tolerance. & \\
+\multicolumn{3}{l}{\textbf{Random events} } \\
+$A_{ijm}$ & The event that station $i$ dispatches $m$ servers to a call from customer $j$ assuming independently busy servers. & $i\in I$, $j\in J$, $m=0,...,s_i$ \\
+$C_{ijl}$ & The event that the stations that are  more preferred than $i$ for customer $j$ dispatch $l$ servers to a call from $j$. & $i\in I$, $j\in J$, $l=0,...,s$\\
+$D_{ijm}$ & The event that station $i$ dispatches $m$ servers to a call from customer $j$ assuming an $M[G]/M/s/s$ model with identically busy servers. & $i\in I$, $j\in J$, $m=0,...,s_i$\\
+$E_{ijl}$ & The event that the stations that are more preferred than $i$ for customer $j$ dispatch $l$ servers to a call from $j$ assuming an $M[G]/M/s/s$ model. & $i\in I$, $j\in J$, $l=0,...,s$\\
+$R_d$ & The event that $d$ servers are requested by the current call. & \\
+$d_{\max}$ & The maximum number of servers that is requested by a single call, i.e., $Pr\{R_d\}=0$ for $d>d_{\max}$. & \\
+$Z_n$ & The event that there are exactly $n$ busy servers in the system. & $n=0,...,s$\\
+$Z_n^i$ & The event that there are exactly $n$ busy servers at station $i$. & $n=0,...,s_i$\\
+\multicolumn{3}{l}{\textbf{Outputs} }\\
+$\rho$ & traffic intensity. & \\
+$r$ & System-wide mean server utilization. & \\
+$r_i$ & Utilization factor for a server located at station $i$. & $i\in I$ \\
+%$f_{ijm}$ & Probability that station $i$ dispatches $m$ servers to a call from customer $i$, i.e., $f_{ijm}=Pr\{A_{ijm}\}$. & $i\in I$, $j\in J$, $m=0,...,s_i$ \\
+$f_{ijm}$ & Probability that station $i$ dispatches $m$ servers to a call from customer $j$.\\
+$h_{ijm}$ & Probability that station $i$ dispatches $m$ servers to a call from customer $j$ assuming independently busy servers, i.e., $h_{ijm}=Pr\{A_{ijm}\}$. & $i\in I$, $j\in J$, $m=0,...,s_i$\\
+$h^c_{ijm}$ & Binomial-approximated probability that station $i$ dispatches $m$ servers to a call from customer $j$ assuming independently and equally busy servers, i.e., $h_{ijm}^c \approx h_{ijm}=Pr\{A_{ijm}\}$. & $i\in I$, $j\in J$, $m=0,...,s_i$  \\
+$p_{ijm}$ & Probability that station $i$ dispatches $m$ servers to a call from customer $k$ assuming an $M[G]/M/s/s$ model with independently and identically busy servers, i.e., $p_{ijm}=Pr\{D_{ijm}\}$. & $i\in I$, $j\in J$, $m=0,...,s_i$ \\
+$P_n$ & Probability that there are exactly $n$ busy servers in the system, i.e., $P_n=Pr\{Z_n\}$. & $n=0,...,s_i$\\
+%$P_s$ & Loss probability: probability that all $s$ servers are busy. & \\
+%$P_0$ & Idle probability: probability that all servers are idle. & \\
+%$R_{wj}$ & Fraction of calls from $j$ that are reached by servers from station $w$ in nine minutes. & $w\in W$, $j\in J$ \\
+$Q_{ijm}$ & The correction factor for when station $i$ dispatches $m$ servers to customer $j$. & $i\in I$, $j\in J$, $m=0,...,s_i$ \\
+%\begin{tabular}[c]{@{}c@{}}$q_{jpm}$\\ \newline \end{tabular} & \begin{tabular}[p{4in}]{@{}p{4in}@{}}A precomputed correction factor (constant) for customer $j$'s $p^{th}$ \\ priority station at which there are $m$ servers located. \end{tabular} & \begin{tabular}[c]{@{}c@{}}$j\in J$, $p=1,...,s$,\\$m=1,...,c_{b_{pj}}$\end{tabular} \\
+%$q_{jpm}$ & \begin{tabular}[c]{@{}c@{}}a precalculated correction factor (constant) for customer $j$'s $p^{th}$ \\ priority server at which there are $m$ servers located. \end{tabular} & \begin{tabular}[c]{@{}c@{}}$j\in J$, $p=1,...,s$,\\$m=1,...,c_{b_{pj}}$\end{tabular} \\
+%$N_{wj}$ & Set of demand nodes that are neighbors to $j$ and are closer to station $w$ than $j$. & $w\in W$, $j\in J$ \\
+%$g_w$ & Location of station $w$, i.e., specifies the demand node in which station $w$ is located ($g_w\in J$). & $w\in W$ \\
+%$\delta$ & Server utilization imbalance tolerance. & \\
+\hline
+\end{tabular}}
+{%* A station is regarded as \emph{open} when there is a server located at that station. The proposed model in the next section decides which stations should be opened and how many server should be located at each opened station.
+}
+\end{table}
+
+\dspace
+
+%-----------------------------------------------------------------
+\section{Steady-State Probabilities for a $M[G]/M/s/s$ Model}
+\label{sec:steady_state_probs} The $M/M/s/s$ and $M/M/s/\infty$
+queueing models with exponential inter-arrival and service
+times with queue lengths of zero and infinity, respectively,
+are two well-known queueing models. However, in many emergency
+systems some of the arriving calls request multiple servers
+depending on the severity of the incident. For example, a call
+center dispatcher may send multiple fire engines to severe
+calls for service, where all vehicles start and finish service
+at the same time. The $M/M/s/s$ and $M/M/s/\infty$ queueing
+models cannot be used to accurately describe this situation,
+since these models assume that each call is processed by a
+single server. As a result, we introduce an extension to the
+$M/M/s$ model that allows for multiple response. Namely, a
+$M[G]/M/s$ model is a queueing model with $s$ servers, Poisson
+arrivals with rate $\lambda$, exponential service times with
+rate $\mu$, and a general probability mass function denoted by
+$G$ for the number of servers requested per incoming call.
+
+{\color{blue}
+Although the assumption of Poisson arrivals is restrictive, it is frequently satisfied in real data sets \citep{galvao2008emergency,desouza2015incorporating}. \citet{kim2014call} test the validity of Poisson arrival assumption in service systems and demonstrate that the assumption is consistent if the data is carefully analyzed. Assuming exponentially distributed service times may not be realistic. In Section \ref{sec:simulation_and_results}, we provide a computational comparison of our approximate Hypercube model outputs with a simulation that uses more realistic lognormal service times fitted to a real dataset to test the impact of lifting this assumption. We find that the errors introduced by assuming exponentially distributed service times are extremely small, and therefore, this assumption does not change the key insights obtained from the model and its analysis.
+}
+
+In this section, we analyze the case with a zero-length queue
+since this assumption is commonly made in emergency systems
+\citep{iannoni2007multiple}, i.e., the calls that arrive when
+all the servers are busy are ``lost'' and in reality are served
+by backup vehicles or by servers from the neighboring
+districts. The $M[G]/M/s$ model allows for partial dispatch
+when there are not enough available servers in the system to
+complete the call, i.e., if an incoming call requests four
+servers and there are only two servers available in the system,
+the dispatcher sends the two servers and the remaining two
+servers are sent by a source external to the system.
+
+Before we derive the steady-state probabilities for this model,
+we need to define the state-space.
+%The steady-state probabilities in a $M/M/s$ model only depend on the number of busy servers in the system. Similarly,
+The steady-state probabilities for a system with multiple
+response depend on the number of calls that are being served by
+$1,2,\cdots,s$ servers. Therefore, state $m$ is a vector $B_m =
+[n_1, n_2, \cdots, n_s]$, where $n_i$ is a non-negative integer
+that indicates the number of calls in the system that are being
+served by $i$ servers. The state-space $S(B)$ can be defined as
+\begin{equation}
+\label{eq:state_space}
+\begin{split}
+\color{blue}S(B) = \{[n_1, n_2, \cdots, n_s]:n_i\geq 0, \sum_{i=1}^s n_ii \leq s \}.
+\end{split}
+\end{equation}
+The size of the state space grows modestly with $s$ when relatively few servers are dispatched to a call, an
+assumption that is reasonable in practice. For example, when
+$d_{max}=3$, then a system with $s=5$ has 16 states, $s=10$ has
+67 states, $s=15$ has 174 states and $s=20$ has 358 states. The state space and transition rates for a model with $s=3$ and $d_{max}=3$ are shown in Figure \ref{fig:state_diagram}. We
+also define $w_i(B_m)=n_i$, $w(B_m)=\sum_{i=1}^{s} n_i =
+\sum_{i=1}^{s} w_i(B_m)$ and $V(B_m)=\sum_{i=1}^{s} n_ii$,
+where $w(B_m)$ is the total number of calls being served and
+$V(B_m)$ is the total number of busy servers in state $B_m$. We
+represent the state transitions by a vector $C_i$, whose
+elements are all zero except the $i^{\text{th}}$ element, with
+\begin{equation}
+\begin{split}
+C_i = \{B:w_i(B)=1, w_j(B)=0 \text{ for } j\neq i, j=1,...,s\}
+\end{split}
+\end{equation}
+If a call arrives that requires $d$ servers while the system is
+in state $B_m$, the system moves to state $B_m+C_d$ if there
+are at least $d$ servers available in the system. Otherwise,
+$d'=s-V(B_m)$ servers are dispatched and the system moves to
+state $B_m+C_{d'}$. Likewise, if the servers finish serving a
+call with $d$ assigned servers, the system moves to state $B_m-C_d$.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{State_Diagram.png}
+	\caption{The state diagram for $s=3$ and $d_{max}=3$. \label{fig:state_diagram}}
+\end{figure}
+
+Let $R_d$ denote the event that $d$ servers are requested by
+the current call. First, we derive the balance equations for
+the states for which $V(B_m)<s$, i.e., the system is not
+exhausted,
+\begin{equation}
+\label{eq:balance_equations(V(Bm)<s)}
+\begin{split}
+(\lambda + \mu w(B_m)) Pr\{B_m\} = & \sum_{d=1:w_d(B_m)>0}^s \lambda Pr\{R_d\}Pr\{B_m-C_d\} \\
++ & \sum_{d=1:V(B_m)+d\leq s}^s \mu (w_d(B_m)+1)Pr\{B_m+C_d\}, \qquad (V(B_m)<s).
+\end{split}
+\end{equation}
+The left-hand side in equation (\ref{eq:balance_equations(V(Bm)<s)}) corresponds to the
+transitions out of state $B_m$ while the right-hand side
+represents the transitions into state $B_m$. The first sum on
+the right hand side accounts for the arrivals that lead to
+state $B_m$ from all states $B_m+C_d$ such that $V(B_m+C_d)\leq s$, and the second term corresponds to the service
+completions that leave the system in state $B_m$. We also
+introduce the balance equations for an exhausted system as
+\begin{equation}
+\label{eq:balance_equations(V(Bm)=s)}
+\begin{split}
+\mu w(B_m) Pr\{B_m\} = & \sum_{d=1:w_d(B_m)>0}^s \sum_{d'=d}^{d_{\max}} \lambda Pr\{R_{d'}\}Pr\{B_m-C_d\} \\
+= & \sum_{d=1:w_d(B_m)>0}^s \lambda Pr\{B_m-C_d\} [1-\sum_{d'=1}^{d-1} Pr\{R_{d'}\}], \qquad (V(B_m)=s).
+\end{split}
+\end{equation}
+
+The left-hand side of the equation (\ref{eq:balance_equations(V(Bm)=s)}) corresponds to the
+departures from state $B_m$ through service completions, and
+the right-hand side accounts for arrivals that lead to state
+$B_m$, including the call arrivals that are responded to by partial
+dispatch due to an insufficient number of available servers.
+
+Now, we can compute the probabilities $Pr\{B_m\}$
+for all the states and use them to compute the steady-state
+probabilities as
+\begin{equation}
+\label{eq:steady_state_probes}
+\begin{split}
+P_n = \sum_{m:V(B_m)=n} Pr\{B_m\}.
+\end{split}
+\end{equation}
+
+{\color{blue}We solve (\ref{eq:balance_equations(V(Bm)<s)}), (\ref{eq:balance_equations(V(Bm)=s)}), and (\ref{eq:steady_state_probes}) as follows. The procedure solves the balance equations (\ref{eq:balance_equations(V(Bm)<s)}) and (\ref{eq:balance_equations(V(Bm)=s)}) and updates the values for $Pr{B_m}$ in (\ref{eq:steady_state_probes}). The procedure repeats the largest deviation in $Pr{B_m}$ from the previous iteration falls below a certain threshold.} These steady-state probabilities are later used in
+Section \ref{sec:iterative_procedure} to compute outputs
+associated with the queueing model through an iterative
+procedure.
+
+%\textbf{Finally, we provide an example to show how the size of state-space $S(B)$ scales with the number of servers in the system. It is assumed that $d_{max}=3$, as practically it is unusual for an emergency call to require more than 3 servers. Experimentally a system with $s=5$ has 16 states, $s=10$ has 67 states, $s=15$ has 174 states and $s=20$ has 358 states. }
+
+%\textbf{(*I changed numbers as I assume $d_{max}=3$. Other assumptions like $d_{max}=5$ or $d_{max}=s$ are also applicable if more suitable. ) }
+% if dmax=5, than |S(B)|=19, 113, 408 and 1125 when s=5,10,15 and 20.
+% if dmax=s, than |S(B)|=19, 139, 684 and 2714 when s=5,10,15 and 20.
+
+
+
+
+%-----------------------------------------------------------------
+\section{Server Utilizations and Dispatch Probabilities}
+\label{sec:dispatch_probabilities} Our objective in this
+section is to derive formulas for computing the server
+utilizations $r_i$, the proportion of time server $i$ is busy,
+and the dispatch probabilities $h_{ijm}$, the probability that
+station $i$ dispatches $m$ servers to a call generated by
+customer $j$, under the assumption that the availability of
+servers are independent from each other. This independence
+assumption is lifted in Section \ref{sec:correction_factors}.
+Let $h_{ijm}^c$ represent a binomial approximation of the Poisson
+binomial variable $h_{ijm}$, which assumes the server busy
+probabilities are equal.
+
+We do not assume that all calls are served with rate $\mu$.
+Instead, we allow for a spatial queueing model, where we allow
+customer-specific service times. The model in this paper
+considers multiple response, where several servers can be sent to
+the same call and all servers sent to the same call have
+identical service times. In contrast, \citet{ChelstBarlach81}
+assume independent service times associated with servers
+dispatched to serve the same call.
+
+%\textbf{(*We have no justifications about why we assume customer-dependent service times(not customer and station dependent): There was certain explanations in Section 5, but I believe you commented it out as it does not fit to the context?)}
+
+We assume a fixed dispatch policy that denotes a priority of station $i$ by customer $j$ as $a_{ij}=k \in \{1,\cdots,|I|\}$, and we continue to assume that $a_{ij}=k$ hereafter for ease of notation. We start by conditioning on the event that the stations
+customer $j$ prefers more than $i$ have already dispatched $l$
+servers and that $d$ servers have been requested by the current
+call. For now, we assume $m>0$, meaning that the more preferred
+stations than $i$ do not have enough available servers to
+dispatch the requested number of servers. We then
+compute the probability that station $i$ dispatches $m$ servers
+to customer $j$ as
+\begin{equation}
+\label{eq:hijm1}
+\begin{split}
+h_{ijm} = Pr\{A_{ijm}\} & = \sum_{d=m}^{d_{\max}} \sum_{l=0}^{\min(z_{k-1},d-m)} Pr\{A_{ijm}|C_{ijl}R_d\}Pr\{C_{ijl}|R_d\} Pr\{R_d\} \\
+                        & = \sum_{d=m}^{d_{\max}} \sum_{l=0}^{\min(z_{k-1},d-m)} Pr\{A_{ijm}|C_{ijl}R_d\}Pr\{C_{ijl}\} Pr\{R_d\}.
+\end{split}
+\end{equation}
+The last step above holds since we assume that $m>0$; hence,
+the more preferred stations have already dispatched all of
+their available servers, and the probability for doing so does
+not depend on $d$. The conditional probability
+$Pr\{A_{ijm}|C_{ijl}R_d\}$ can be computed for two separate
+cases when the current station has enough available servers to complete
+the request by sending the remaining number of requested
+servers ($m=d-l$) and when it does not ($m<d-l$).  In the former case, we send exactly $m=d-l$ servers from
+station $i$. In the latter case all servers at $i$ are
+examined and we send all available servers($m<d-l$) at $i$ to
+the call, while $d-m-l$ servers are also dispatched from stations that are less preferred than $i$. Therefore, this is a binomial probability with
+probability of success (busy server) equal to $r_i$,
+\begin{equation}
+\label{eq:P(Aijm|Cijl&l+m<d)}
+\begin{split}
+Pr\{A_{ijm}|C_{ijl} \cap R_d \cap (l+m<d) \} = {s_i \choose m} r_i^{s_i-m}(1-r_i)^m.
+\end{split}
+\end{equation}
+
+We condition on the event that there are $n$ busy servers at
+station $i$, $Z_n^i$, to compute the probability of dispatching
+$m$ servers to a call from $j$ given that $d$ servers are
+requested and $l$ servers are already dispatched, in the case
+where $l+m=d$,
+\begin{equation}
+\begin{split}
+& Pr\{A_{ijm}|C_{ijl} \cap R_d \cap (l+m=d) \} \\
+& = \sum_{n=0}^{s_i-m} Pr\{A_{ijm}|C_{ij(d-m)} \cap R_d \cap Z_n^i \} Pr\{Z_n^i\}.
+\end{split}
+\end{equation}
+Note that the first term in the product is equal to 1 since we
+have conditioned on $l+m=d$, i.e., the more preferred stations
+than $i$ have dispatched $d-m$ servers, and there are at least
+$m$ servers available at $i$. Therefore, the equation above can
+be simplified to
+\begin{equation}
+\label{eq:P(Aijm|Cijl&l+m=d)}
+\begin{split}
+Pr\{A_{ijm}|C_{ijl} \cap R_d \cap (l+m=d) \} = \sum_{n=0}^{s_i-m} Pr\{Z_n^i\} = \sum_{n=0}^{s_i-m} {s_i \choose n} r_i^n(1-r_i)^{s_i-n}.
+\end{split}
+\end{equation}
+
+The term $Pr\{C_{ijl}\}$ captures the probability that the more
+preferred stations dispatch $l$ servers in response to a call
+from $j$. This probability, which we denote by $\xi_{ijl}$, can
+be expressed as
+\begin{equation}
+\label{eq:Cijl}
+\begin{split}
+\xi_{ijl} = Pr\{C_{ijl}\} = \sum_{\phi\in\Phi_{l}^{ij}} \prod_{u=1}^{k-1} {s_{(u)_j} \choose \phi(u)} r_{(u)_j}^{s_{(u)_j}-\phi(u)} (1-r_{(u)_j})^{\phi(u)},
+\end{split}
+\end{equation}
+where $\Phi_{l}^{ij}$ is the set of all possible vectors of
+$k-1$ non-negative integer numbers whose sum is equal to $l$
+such that the $u^{\text{th}}$ number is less than or equal to
+$s_{(u)j}$ and $\phi(u)$ is the $u^\text{th}$ number in vector
+$\phi$ corresponding to the $u^\text{th}$ priority station. In
+other words, (\ref{eq:Cijl}) sums over all the possible
+combinations of $l$ available servers and $z_{k-1}-l$ busy
+servers at the first $k-1$ stations, and computes the
+probability of each combination as the product of the binomial
+probabilities corresponding to each station. This is a special
+case of the Poisson binomial distribution, an extension of the
+binomial distribution for which the probability of success is
+not necessarily the same for all the trials. Therefore,
+$Pr\{C_{ijl}\}$ can be computed using the probability
+distribution where $l$ is the number of successes and the
+$(1-r_{(u)_j})$ values are the probabilities of success.
+\citet{fernandez2010closed} and \citet{hong2011computing}
+proposed a closed-form expression for the probability mass
+function of the Poisson binomial distribution using the Inverse
+Fourier transform of the characteristic function of the
+distribution. Using this closed-form expression, we can express
+(\ref{eq:Cijl}) as
+\begin{equation}
+\label{eq:xi_ijl}
+\begin{split}
+\xi_{ijl} = \frac{1}{z_{k-1}+1} \sum_{u=0}^{z_{k-1}}K^{-ul} \prod_{v=1}^{k-1} (1+(K^u-1)(1-r_{(v)j}))^{s_{(v)j}},
+\end{split}
+\end{equation}
+where $K=\exp(\frac{2\nu\pi}{z_{k-1}+1})$ and $\nu$ is the
+imaginary unit. Moreover, we can use the cumulative density
+function of the Poisson binomial distribution, denoted by
+$\Xi_{ij}(q)$, to compute the probability that the more
+preferred stations than $i$ dispatch no more than $q$ servers
+to a call from $j$,
+\begin{equation}
+\label{eq:Xi_ijl}
+\begin{split}
+\Xi_{ij}(q) = \sum_{l=0}^q \xi_{ijl} = \frac{1}{z_{k-1}+1} \sum_{u=0}^{z_{k-1}} \frac{1-K^{u(q+1)}}{1-K^u} \prod_{v=1}^{k-1} (1+(K^u-1)(1-r_{(v)j}))^{s_{(v)j}}.
+\end{split}
+\end{equation}
+By substituting (\ref{eq:P(Aijm|Cijl&l+m<d)}),
+(\ref{eq:P(Aijm|Cijl&l+m=d)}) and (\ref{eq:xi_ijl}) in
+(\ref{eq:hijm1}), we can obtain the equation for $h_{ijm}$ as
+\begin{equation}
+\label{eq:hijm2}
+\begin{split}
+h_{ijm} & = \sum_{d=m}^{d_{\max}} \left( \sum_{l=0}^{\min(z_{k-1},d-m-1)} {s_i \choose m} r_i^{s_i-m}(1-r_i)^m \xi_{ijl} \right) Pr\{R_d\} \\
+& + \sum_{d=m}^{z_{k-1}+m} \left( \sum_{n=0}^{s_i-m} {s_i \choose n} r_i^n (1-r_i)^{s_i-n} \xi_{ij(d-m)} \right) Pr\{R_d\} \\
+& = {s_i \choose m} r_i^{s_i-m}(1-r_i)^m \sum_{t=0}^{d_{\max}-m} \left[ \sum_{l=0}^{\min(z_{k-1},t-1)} \xi_{ijl} \right] Pr\{R_{t+m}\} \\
+& + \left( \sum_{n=0}^{s_i-m} {s_i \choose n} r_i^n (1-r_i)^{s_i-n} \right) \left( \sum_{t=0}^{z_{k-1}} \xi_{ijt} Pr\{R_{t+m}\} \right). \\
+\end{split}
+\end{equation}
+Notice that the term $d-m$ is substituted with $t$ for ease of
+notation, and the bounds for the sums are adjusted accordingly.
+The sum inside the brackets is the cumulative density function
+of the Poisson binomial distribution, introduced in
+(\ref{eq:Xi_ijl}). Hence, we can rewrite (\ref{eq:hijm2}) as
+\begin{equation}
+\label{eq:hijm3}
+\begin{split}
+h_{ijm} = & {s_i \choose m} r_i^{s_i-m}(1-r_i)^m \sum_{t=0}^{d_{\max}-m} \left[ \Xi_{ij}(\min(z_{k-1},t-1)) Pr\{R_{t+m}\} \right] \\
++ & \left( \sum_{n=0}^{s_i-m} {s_i \choose n} r_i^n (1-r_i)^{s_i-n} \right) \left( \sum_{t=0}^{z_{k-1}} \xi_{ijt} Pr\{R_{t+m}\} \right), \qquad (m>0). \\
+\end{split}
+\end{equation}
+We can compute $h_{ijm}$ when $m=0$ as
+\begin{equation}
+\label{eq:hij0}
+\begin{split}
+h_{ij0} = 1-\sum_{m=1}^{s_i} h_{ijm}.
+\end{split}
+\end{equation}
+We can rewrite (\ref{eq:hijm3}) as
+\begin{equation}
+\label{eq:hijm4}
+\begin{split}
+h_{ijm} = (1-r_i)^{s_i} w_{ijm}, \\
+\end{split}
+\end{equation}
+where $w_{ijm}$ is defined as
+\begin{equation}
+\label{eq:wijm}
+\begin{split}
+w_{ijm} = & {s_i \choose m} r_i^{s_i-m}(1-r_i)^{-s_i+m} \sum_{t=0}^{d_{\max}-m} \left[ \Xi_{ij}(\min(z_{k-1},t-1)) Pr\{R_{t+m}\} \right] \\
++ & \left( \sum_{n=0}^{s_i-m} {s_i \choose n} r_i^n (1-r_i)^{-n} \right) \left( \sum_{t=0}^{z_{k-1}} \xi_{ijt} Pr\{R_{t+m}\} \right), \qquad (m>0),
+\end{split}
+\end{equation}
+and
+\begin{equation}
+\label{eq:wij0}
+\begin{split}
+w_{ij0} & = \frac{h_{ij0}}{(1-r_i)^{s_i}} = \frac{1-\sum_{m=1}^{s_i} h_{ijm}}{(1-r_i)^{s_i}} \\
+& = \frac{1-\sum_{m=1}^{s_i} (1-r_i)^{s_i} w_{ijm}}{(1-r_i)^{s_i}} = \frac{1}{(1-r_i)^{s_i}} - \sum_{m=1}^{s_i} w_{ijm}.
+\end{split}
+\end{equation}
+
+%\textbf{Do we need this idea? Also, there exist an inconsistency in using $h_{ijm}$ and $h^C_{ijm}$: We use $h_{ijm}$ in computing the dispatch probability but use $h^C_{ijm}$ to get correction factors}
+An approximation for $h_{ijm}$ can be obtained by using the
+system-wide mean server utilization, $r$, instead of the
+individual server utilizations. The approximation, $h_{ijm}^c$
+can be derived by replacing the Poisson binomial probabilities
+with binomial probabilities, as shown below.
+\begin{equation}
+\label{eq:hijm^c}
+\begin{split}
+h_{ijm}^c = & {s_i \choose m} r^{s_i-m}(1-r)^m \sum_{t=0}^{d_{\max}-m} \left[ \sum_{l=0}^{\min(z_{k-1},t-1)} {z_{k-1} \choose l} r^{z_{k-1}-l} (1-r)^l Pr\{R_{t+m}\} \right] \\
++ & \left( \sum_{n=0}^{s_i-m} {s_i \choose n} r^n (1-r)^{s_i-n} \right) \left( \sum_{t=0}^{z_{k-1}} {z_{k-1} \choose t} r^{z_{k-1}-t} (1-r)^t Pr\{R_{t+m}\} \right), \qquad (m>0). \\
+\end{split}
+\end{equation}
+%Recall that the only difference between the Poisson binomial distribution and the binomial distribution is that the probability of success is not necessarily the same for different trials in Poisson binomial distribution, and therefore when the values of $r_i$ are close and do not deviate much from the system-wide server utilization $r$, which is often the case in practice, then the above approximation is relatively precise.
+
+Likewise, the value for $h_{ijm}^c$ when $m=0$ can be computed
+using (\ref{eq:hij0}) by summing over the values of $h_{ijm}^c$
+instead of $h_{ijm}$. The probabilities in (\ref{eq:hijm3}) are
+computed based on the assumption that the status of each server
+is statistically independent from other servers. The
+probabilities $h_{ijm}^c$ are used in the next section to
+compute the correction factors $Q_{ijm}$. The correction
+factors introduced in Section \ref{sec:correction_factors} are
+the ratio between the dispatch probabilities with dependent,
+equally busy servers and the dispatch probabilities with
+independent, equally busy servers. These correction factors are
+multiplied by the values of $h_{ijm}$ to reduce the effect of
+the server independence assumption. Hence, the dispatch
+probabilities can be approximated as $Q_{ijm} h_{ijm} = Q_{ijm}
+(1-r_i)^{s_i} w_{ijm}$ where $Q_{ijm}$ is the correction factor
+for customer $j$ and $m$ servers being dispatched from station
+$i$.
+
+The utilization for the servers that are located at station $i$
+can be calculated as
+\begin{equation}
+\label{eq:ri}
+\begin{split}
+r_i = & \frac{1}{s_i} \sum_{j\in J} \sum_{m=0}^{s_i} \lambda_j h_{ijm} m / \mu_{j} \\
+= & \frac{1}{s_i} \sum_{j\in J} \sum_{m=0}^{s_i} \lambda_j Q_{ijm} (1-r_i)^{s_i} w_{ijm} m / \mu_{j} \\
+= & \frac{1}{s_i} (1-r_i)^{s_i} V_i,
+\end{split}
+\end{equation}
+where
+\begin{equation}
+\label{eq:Vi}
+\begin{split}
+V_i = \sum_{j\in J} \sum_{m=0}^{s_i} \lambda_j Q_{ijm} w_{ijm} m / \mu_{j}.
+\end{split}
+\end{equation}
+We can rewrite the equation for $r_i$ as follows.
+\begin{equation}
+\label{eq:ri2}
+\begin{split}
+& r_i = \frac{1}{s_i} (1-r_i)^{s_i} V_i \Rightarrow \frac{s_i r_i^{s_i}}{r_i^{s_i-1}} = (1-r_i)^{s_i} V_i \Rightarrow \left( \frac{1-r_i}{r_i} \right)^{s_i} = \frac{s_i}{r_i^{s_i-1}V_i} \Rightarrow \\
+& \frac{1-r_i}{r_i} = \left( \frac{s_i}{r_i^{s_i-1}V_i} \right)^{\sfrac{1}{s_i}} \Rightarrow r_i = \frac{1}{\left( \frac{s_i}{r_i^{s_i-1}V_i} \right)^{\sfrac{1}{s_i}}+1} = \frac{(r_i^{s_i-1} V_i)^{\sfrac{1}{s_i}}}{s_i^{\sfrac{1}{s_i}} + (r_i^{s_i-1} V_i)^{\sfrac{1}{s_i}}}.
+\end{split}
+\end{equation}
+We use this equation for $r_i$ later in our iterative
+procedure. Next, we derive the correction factors $Q_{ijm}$.
+
+
+
+
+%-----------------------------------------------------------------
+\section{Correction Factors}
+\label{sec:correction_factors} In this section, we derive the
+correction factors by assuming that the system works according
+to a $M[G]/M/s/s$ model, with a zero-line queue. The calls that
+arrive when all the servers are busy or the calls that are
+partially served receive service from the backup vehicles or
+from the neighboring regions.
+
+The first step in deriving the correction factors is to compute
+the dispatch probabilities $p_{ijm}$ with the independence
+assumption lifted.  We do so by conditioning on $E_{ijl}$,
+$Z_n$ and $R_d$. As we condition on the number of busy servers
+$Z_n$, whether a server is available or busy is now correlated
+with the status of the other servers. When computing the joint
+probability that $m$ out of $s_i$ servers are available,
+instead of multiplying the busy probability of each server as
+in previous section, all possible orders of sampling a certain
+number of available and busy servers should be considered in
+this $M[G]/M/s/s$ model. This difference from the last section
+leads to the development of the correction factors $p_{ijm}$,
+which are
+\begin{equation}
+\label{eq:pijm1}
+\begin{split}
+p_{ijm} = Pr\{D_{ijm}\} & = \sum_{n=0}^s \sum_{d=m+L_1}^{d_{\max}} \sum_{l=L_2}^{U_1} Pr\{D_{ijm}|E_{ijl} R_d Z_n \}Pr\{E_{ijl} R_d Z_n\} \\
+                        & = \sum_{n=0}^s \sum_{d=m+L_1}^{d_{\max}} \sum_{l=L_2}^{U_1} Pr\{D_{ijm}|E_{ijl} R_d Z_n\}Pr\{E_{ijl} | R_d Z_n\} Pr\{R_d\} Pr\{Z_n\},
+\end{split}
+\end{equation}
+where $L_1=\max(z_{k-1}-n,0)$, $L_2=\max(z_{k-1}-n,z_k-m-n,0)$
+and $U_1=\min(d-m,z_{k-1},s-n-m)$. We assume that the number of
+requested servers does not depend on the status of the system
+and therefore $R_d$ and $Z_n$ are independent. Probabilities
+$Pr\{R_d\}$ are input parameters and probabilities $Pr\{Z_n\}$
+are the steady-state probabilities derived in Section
+\ref{sec:steady_state_probs}. Next, we find the expressions for
+$Pr\{D_{ijm}|E_{ijl} R_d Z_n\}$ and $Pr\{E_{ijl} | R_d Z_n\}$.
+Here, it is assumed that $m>0$, i.e., the current station
+dispatches at least one server. There are two possibilities in
+computing $Pr\{D_{ijm}|E_{ijl} R_d Z_n\}$, the current station
+either has enough available servers to complete the request
+($l+m=d$) or it does not ($l+m<d$). We first consider the
+latter case. The probability that the first sampled server at
+the $k^\text{th}$ preferred station is busy given that there
+are $n$ busy servers in the system and that the more preferred
+stations have already dispatched $l$ servers in response to the
+current call is $\frac{n-(z_{k-1}-l)}{s-z_{k-1}}$. {\color{blue}{This probability is computed under the assumption that servers are dependent. The denominator is the total number of servers at stations with preference $k,\cdots,|I|$ and the numerator is the number of busy servers at those stations.}} Likewise,
+the probability that the second sampled server is busy is
+$\frac{n-(z_{k-1}-l)-1}{s-z_{k-1}-1}$, and so on. Therefore, we
+can write,
+\begin{equation}
+\begin{split}
+& Pr\{D_{ijm}|E_{ijl} \cap R_d \cap Z_n \cap (l+m<d)\} \\
+& = \Biggl[\left(1-\frac{n-(z_{k-1}-l)}{s-z_{k-1}}\right)\times \left(1-\frac{n-(z_{k-1}-l)}{s-z_{k-1}-1}\right)\times \cdots \times \left(1-\frac{n-(z_{k-1}-l)}{s-z_{k-1}-(m-1)}\right) \\
+& \times \frac{n-(z_{k-1}-l)}{s-z_{k-1}-m} \times \frac{n-(z_{k-1}-l)-1}{s-z_{k-1}-(m+1)} \times \cdots \times \frac{n-(z_{k-1}-l)-(s_i-m-1)}{s-z_{k-1}-(s_i-1)}\Biggr] + \cdots \\
+& + \Biggl[\frac{n-(z_{k-1}-l)}{s-z_{k-1}}\times \frac{n-(z_{k-1}-l)-1}{s-z_{k-1}-1}\times \cdots \times \frac{n-(z_{k-1}-l)-(s_i-m-1)}{s-z_{k-1}-(s_i-m-1)} \\
+& \times \left(1-\frac{n-(z_{k-1}-l)-(s_i-m)}{s-z_{k-1}-(s_i-m)}\right) \times \left(1-\frac{n-(z_{k-1}-l)-(s_i-m)}{s-z_{k-1}-(s_i-m+1)}\right) \times \cdots \\
+& \times \left(1-\frac{n-(z_{k-1}-l)-(s_i-m)}{s-z_{k-1}-(s_i-1)}\right)\Biggr], \\
+\end{split}
+\end{equation}
+where the sum involves all the possible orders of sampling $m$
+available servers and $s_i-m$ busy servers at station $i$.
+There are ${s_i \choose m}$ terms in the sum and it can be
+simplified as
+\begin{equation}
+\label{eq:P(Aijm|l+m<d)}
+\begin{split}
+& Pr\{D_{ijm}|E_{ijl} \cap R_d \cap Z_n \cap (l+m<t)\} \\
+& = {s_i \choose m} \frac{\prod_{u=0}^{s_i-m-1}(n-(z_{k-1}-l)-u) \prod_{u=0}^{m-1}(s-n-l-u)}{\prod_{u=0}^{s_i-1}(s-z_{k-1}-u)}.
+\end{split}
+\end{equation}
+
+Next, we find the same probabilities given that $l+m=d$.
+\begin{equation}
+\label{eq:P(Aijm|l+m=d)}
+\begin{split}
+& Pr\{D_{ijm}|E_{ijl} \cap R_d \cap Z_n \cap (l+m=d)\} \\
+& = \Biggl[\left(1-\frac{n-(z_{k-1}-l)}{s-z_{k-1}}\right)\times \left(1-\frac{n-(z_{k-1}-l)}{s-z_{k-1}-1}\right)\times \cdots \times \left(1-\frac{n-(z_{k-1}-l)}{s-z_{k-1}-(m-1)}\right)\Biggr] + \cdots \\
+& + \Biggl[\frac{n-(z_{k-1}-l)}{s-z_{k-1}}\times \frac{n-(z_{k-1}-l)-1}{s-z_{k-1}-1}\times \cdots \times \frac{n-(z_{k-1}-l)-U_2+1}{s-z_{k-1}-U_2+1} \\
+& \times \left(1-\frac{n-(z_{k-1}-l)-U_3}{s-z_{k-1}-U_2}\right) \times \left(1-\frac{n-(z_{k-1}-l)-U_2}{s-z_{k-1}-(U_3+1)}\right) \times \cdots \\
+& \times \left(1-\frac{n-(z_{k-1}-l)-U_3}{s-z_{k-1}-(U_2+m-1)}\right)\Biggr] ,
+\end{split}
+\end{equation}
+where $U_2=\min(s_i-m,n-z_{k-1}+l)$. We use $v$ to denote the
+number of busy servers that are sampled before we find the
+$m^\text{th}$ available server at the $k^\text{th}$ preferred
+station. Now we can simplify (\ref{eq:P(Aijm|l+m=d)}) to
+\begin{equation}
+\label{eq:P(Aijm|l+m=d)2}
+\begin{split}
+& Pr\{D_{ijm}|E_{ijl} \cap R_d \cap Z_n \cap (l+m=t)\} \\
+& = \sum_{v=0}^{U_2} {v+m-1 \choose v} \frac{\prod_{u=0}^{v-1} (n-(z_{k-1}-l)-u) \prod_{u=0}^{m-1} (s-n-l-u)}{\prod_{u=0}^{v+m-1}(s-z_{k-1}-u)}.
+\end{split}
+\end{equation}
+
+Next, we need to compute the conditional probability
+$Pr\{E_{ijl}|R_d Z_n\}$ in a similar manner. Since we are
+assuming that $m>0$, the more preferred stations should have
+dispatched all of their available servers. Hence, the
+probability that $l$ servers are dispatched by the more
+preferred stations is only dependent on the number of busy
+(free) servers at those stations and not $d$. As a result, we
+can write
+\begin{equation}
+\label{eq:P(Cijm)}
+\begin{split}
+& Pr\{E_{ijl}|R_d Z_n\} = Pr\{E_{ijl}|Z_n\} \\
+& = \Biggl[\left(1-\frac{n}{s}\right)\times \left(1-\frac{n}{s-1}\right)\times \cdots \times \left(1-\frac{n}{s-(l-1)}\right) \times \frac{n}{s-l} \times \frac{n-1}{s-(l+1)} \times \cdots \\
+& \times \frac{n-(z_{k-1}-l-1)}{s-(z_{k-1}-1)}\Biggr] + \cdots + \Biggl[\frac{n}{s}\times \frac{n-1}{s-1}\times \cdots \times \frac{n-(z_{k-1}-l-1)}{s-z_{k-1}-l-1} \\
+& \times \left(1-\frac{n-(z_{k-1}-l)}{s-(z_{k-1}-l)}\right) \times \left(1-\frac{n-(z_{k-1}-l)}{s-(z_{k-1}-l+1)}\right) \times \cdots \times \left(1-\frac{n-(z_{k-1}-l)}{s-(z_{k-1}-1)}\right)\Biggr] \\
+& = {z_{k-1} \choose l} \frac{\prod_{u=0}^{z_{k-1}-l-1}(n-u) \prod_{u=0}^{l-1}(s-n-u)}{\prod_{u=0}^{z_{k-1}-1}(s-u)}.
+\end{split}
+\end{equation}
+
+Now we can rewrite (\ref{eq:pijm1}) by dividing cases such that $l+m<d$ and $l+m=d$, as
+\begin{equation}
+\label{eq:pijm2}
+\begin{split}
+p_{ijm} = Pr\{D_{ijm}\} = & \sum_{n=0}^s \sum_{d=m+L_1}^{d_{\max}} \Biggl[ \left(\sum_{l=L_2}^{U_3} Pr\{D_{ijm}|E_{ijl} R_d Z_n\}Pr\{E_{ijl} | Z_n\} \right) \\
++ & Pr\{D_{ijm}|E_{ij(d-m)} R_d Z_n\}Pr\{E_{ij(d-m)} | Z_n\} \Biggr]Pr\{R_d\} Pr\{Z_n\},
+\end{split}
+\end{equation}
+where $U_3=\min(d-m-1,z_{k-1},s-n-m)$. We can obtain the first
+term in (\ref{eq:pijm2}), \[Pr\{D_{ijm}|E_{ijl} R_d
+Z_n\}Pr\{E_{ijl} | Z_n\},\] by multiplying
+(\ref{eq:P(Aijm|l+m<d)}) and (\ref{eq:P(Cijm)}). Given that
+$(l+m<d)$, we have
+\begin{equation}
+\label{eq:P(Aijm|l+m<d)P(Cijm)}
+\begin{split}
+& Pr\{D_{ijm}|E_{ijl} R_d Z_n\}Pr\{E_{ijl}|Z_n\} \\
+& = {s_i \choose m} \frac{\prod_{u=0}^{s_i-m-1}(n-(z_{k-1}-l)-u) \prod_{u=0}^{m-1}(s-n-l-u)}{\prod_{u=0}^{s_i-1}(s-z_{k-1}-u)} \\
+& \times {z_{k-1} \choose l} \frac{\prod_{u=0}^{z_{k-1}-l-1}(n-u) \prod_{u=0}^{l-1}(s-n-u)}{\prod_{u=0}^{z_{k-1}-1}(s-u)} \\
+& = {s_i \choose m}{z_{k-1} \choose l} \frac{\prod_{u=0}^{z_{k-1}-l-m-1}(n-u)\prod_{u=0}^{l+m-1}(s-n-u)}{\prod_{u=0}^{s_i-1}(s-u)} .
+\end{split}
+\end{equation}
+Likewise, we use (\ref{eq:P(Aijm|l+m=d)2}) and
+(\ref{eq:P(Cijm)}) to obtain the second term in (\ref{eq:pijm2}), \[Pr\{D_{ijm}|E_{ij(d-m)} R_d Z_n\}Pr\{E_{ij(d-m)} | Z_n\},\]
+given that $l+m=d$.
+\begin{equation}
+\label{eq:P(Aijm|l+m=d)P(Cijm)}
+\begin{split}
+& Pr\{D_{ijm}|E_{ij(d-m)} R_d Z_n\}Pr\{E_{ij(d-m)} | Z_n\} \\
+& = \sum_{v=0}^{U_2} {v+m-1 \choose v} \frac{\prod_{u=0}^{v-1} (n-(z_{k-1}-(d-m))-u) \prod_{u=0}^{m-1} (s-n-(d-m)-u)}{\prod_{u=0}^{v+m-1}(s-z_{k-1}-u)} \\
+& \times {z_{k-1} \choose d-m} \frac{\prod_{u=0}^{z_{k-1}-(d-m)-1}(n-u) \prod_{u=0}^{(d-m)-1}(s-n-u)}{\prod_{u=0}^{z_{k-1}-1}(s-u)} \\
+& = {z_{k-1} \choose d-m} \sum_{v=0}^{U_2} {v+m-1 \choose v} \frac{\prod_{u=0}^{z_{k-1}-(d-m)+(v-1)}(n-u)\prod_{u=0}^{d-1}(s-n-u)}{\prod_{u=0}^{z_{k-1}+v+m-1}(s-u)}
+\end{split}
+\end{equation}
+
+The final equation for $p_{ijm}$ can be obtained by
+substituting (\ref{eq:P(Aijm|l+m<d)P(Cijm)}) and
+(\ref{eq:P(Aijm|l+m=d)P(Cijm)}) in (\ref{eq:pijm2}), yielding
+\begin{equation}
+\label{eq:pijm3}
+\begin{split}
+p_{ijm} & = \sum_{n=0}^s \sum_{d=L_1}^{d_{\max}} \Biggl[ \left(\sum_{l=L_2}^{U_3} {s_i \choose m}{z_{k-1} \choose l} \frac{\prod_{u=0}^{z_{k-1}-l-m-1}(n-u)\prod_{u=0}^{l+m-1}(s-n-u)}{\prod_{u=0}^{z_i-1}(s-u)} \right) \\
+& + {z_{k-1} \choose d-m} \sum_{v=0}^{U_2} {v+m-1 \choose v} \frac{\prod_{u=0}^{z_{k-1}-(d-m)+(v-1)}(n-u)\prod_{u=0}^{d-1}(s-n-u)}{\prod_{u=0}^{z_{k-1}+v+m-1}(s-u)} \Biggr]Pr\{R_d\} Pr\{Z_n\}.
+\end{split}
+\end{equation}
+The correction factors can be found by dividing $p_{ijm}$ and
+$h_{ijm}^c$,
+\begin{equation}
+\label{eq:Qijm}
+\begin{split}
+Q_{ijm} = \frac{p_{ijm}}{h_{ijm}^c}.
+\end{split}
+\end{equation}
+Note that we are consistent in assuming an equal busy
+probability between the servers in both the numerator $p_{ijm}$
+and the denominator $h^c_{ijm}$ so that these correction
+factors properly correct for the dependency between the
+servers. %Hence the  approximation term $h_{ijm}^c$ is used instead of $h_{ijm}$.
+These correction factors simplify to the
+correction factors from \citet{Budge-etal-09} when one server is
+sent to each call when one is available, i.e., $Pr\{R_1\}=1$
+and $Pr\{R_d\}=0$ for $d\neq1$.
+
+
+%-----------------------------------------------------------------
+\section{Iterative Procedure}
+\label{sec:iterative_procedure} Thus far, we derived the
+balance equations and the steady-state probabilities for a
+$M[G]/M/s/s$ queueing model, the equations for the dispatch
+probabilities, the server utilizations and the correction
+factors. We now introduce an iterative procedure that uses
+these elements to compute different outputs such as server
+utilizations and dispatch probabilities for a dispatching model
+with multiple servers per station and multiple response.
+
+%As a result, service times should depend on the identity of all
+%the stations that are involved in serving the current call.
+%Considering all combinations of stations would lead to an
+%exponential number of potential service times, which would
+%result in an intractable model.
+
+%However, it is known that service times are composed of
+%response time, time at the scene, travel time to the hospital,
+%and return time. Time at the scene and travel time to the
+%hospital only depend on the type and location of the call and
+%not on the stations from which the servers have been
+%dispatched. Time at the scene is usually the longest time among
+%the four. Moreover, the emergency systems always try to
+%minimize the response and return times in order to maximize the
+%coverage and minimize the server idle times.
+
+Recall that the service rates depend on the customer locations.
+The average service time $\tau$ remains constant during the
+iterative procedure and can be computed as follows:
+\begin{equation}
+\label{eq:tau}
+\begin{split}
+\tau = \frac{1}{\mu} = \frac{1}{\lambda} \sum_{j\in J} \lambda_j / \mu_j.
+\end{split}
+\end{equation}
+Likewise, the steady-state probabilities are a function of $\mu
+= 1/\tau$, $\lambda$ and the probabilities $Pr\{R_j\}$, none of
+which change during the iterative procedure. Hence, the
+steady-state probabilities remain constant. The system wide
+mean server utilization can be computed as
+\begin{equation}
+\label{eq:utilization}
+\begin{split}
+r = \sum_{n=1}^{s} nP_n.
+\end{split}
+\end{equation}
+Therefore, $r$ does not change since values of $P_n$ are
+constant during the procedure, $n=0,1,...,s$. As a result,
+$\tau$, the values of $P_n$ and $r$, can be computed in advance
+and used within the iterative procedure.
+
+The algorithm starts with an initialization step, then it
+enters the main computation loop, and terminates when the
+change in the server utilizations from the previous iteration
+becomes less than a pre-specified threshold, $\varepsilon$.
+
+\begin{description}
+  \item[\textbf{Step $\mathbf{0.}$}] Compute $\tau$ using
+      (\ref{eq:tau}), the values of $P_n$ using
+      (\ref{eq:balance_equations(V(Bm)<s)}),(\ref{eq:balance_equations(V(Bm)=s)})
+      and (\ref{eq:steady_state_probes}), and $r$ using
+      (\ref{eq:utilization}). Initialize the
+      station-specific utilities as $r_i=r$. Set the
+      iteration counter $t$ to 1.
+  \item[\textbf{Step $\mathbf{1.}$}] Compute the correction
+      factors $Q_{ijm}$ using (\ref{eq:hijm^c}),
+      (\ref{eq:pijm3}) and (\ref{eq:Qijm}).
+  \item[\textbf{Step $\mathbf{2.}$}] Use (\ref{eq:xi_ijl}),
+      (\ref{eq:Xi_ijl}), (\ref{eq:wijm}), (\ref{eq:wij0})
+      and the correction factors from step 1 to compute
+      $V_i^t$ by (\ref{eq:Vi}). Compute $r_i^t$ using
+      (\ref{eq:ri2}) having $V_i^t$ and $r_i^{t-1}$.
+      Normalize the utilizations using
+        \begin{equation}
+        \label{eq:normalization}
+        \begin{split}
+        r_i \leftarrow r\frac{s r_i}{\sum_{i'\in I} s_i r_i}.
+        \end{split}
+        \end{equation}
+  \item[\textbf{Step $\mathbf{3.}$}] If $\max
+      |r_i^t-r_i^{t-1}| > \varepsilon$, set $t\leftarrow
+      t+1$ and go to step 1; otherwise, go to step 4.
+  \item[\textbf{Step $\mathbf{4.}$}] Find the dispatch
+      probabilities using the approximation $f_{ijm}
+      \approx Q_{ijm} h_{ijm}$.
+\end{description}
+
+
+Convergence is not guaranteed, as is the case with other
+approximate Hypercube models in \citet{Budge-etal-09,Jarvis85}.
+However, the algorithm always converged in our extensive
+computational experiments.
+
+
+
+\section{Simulation and Results}
+\label{sec:simulation_and_results}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{ServerDistribution1.pdf}
+%                \caption{A gull}
+                \label{fig:serv_dist1}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{ServerDistribution2.pdf}
+%                \caption{A tiger}
+                \label{fig:serv_dist2}
+        \end{subfigure}
+        \\
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{ServerDistribution3.pdf}
+%                \caption{A mouse}
+                \label{fig:serv_dist3}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{ServerDistribution4.pdf}
+%                \caption{A mouse}
+                \label{fig:serv_dist4}
+        \end{subfigure}
+        \caption{The number of servers at each station (``the server distributions'') for each of the four test cases}\label{fig:server_dists}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{PMF1.pdf}
+%                \caption{A gull}
+                \label{fig:pmf1}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{PMF2.pdf}
+%                \caption{A tiger}
+                \label{fig:pmf2}
+        \end{subfigure}
+        \\
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{PMF3.pdf}
+%                \caption{A mouse}
+                \label{fig:pmf3}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{PMF4.pdf}
+%                \caption{A mouse}
+                \label{fig:pmf4}
+        \end{subfigure}
+        \caption{The probability mass functions that capture the number of requested servers per call, $Pr\{R_d\}, d=1,...,d_{max}$, for the four test cases.}\label{fig:pmfs}
+\end{figure}
+
+We evaluate the proposed approximate Hypercube model introduced
+in Sections 3 and 4. The results of the model are compared to
+those of a discrete-event simulation for different number of
+servers, different server distributions and different
+probability mass functions for the number of requested server
+per each call. We use four different server distributions and
+four different probability mass functions for the number of requested servers per call that are depicted in
+Figures \ref{fig:server_dists} and \ref{fig:pmfs}. For each
+server distribution, a random dispatch policy is generated and
+used in the discrete-event simulation.
+%The dispatch policies \textbf{captured by the values of XXX (SOMETHING IS MISSING HERE. CAN YOU FIX THIS SENTENCE?)} are randomly generated for each server distribution.
+The first three probability mass functions have decreasing
+probabilities as the number of requested servers increases,
+with different values of $d_{max}$. The fourth probability mass
+function has the highest probability at 3 requested servers.
+Sixteen different scenarios are thus generated for every
+combination of the four server distributions and four
+probability mass functions to test the proposed Hypercube
+model. Each scenario has 100 customer locations where the call
+arrival rates and service rates are generated randomly
+according to a uniform distribution such that $\rho=0.4$ where
+\begin{equation}
+\label{eq:rho}
+\begin{split}
+\rho = \overline{d}\frac{\sum_{j\in J} \lambda_j / \mu_j}{s \lambda},
+\end{split}
+\end{equation}
+and $\overline{d} = \sum_{d=1}^{d_{\max}} d\, Pr\{R_d\}$.
+{\color{blue}In each of the discrete-event simulation runs, all servers are initially idle, and a warm-up period of 2000 calls is used to exclude the effect of the transient behavior at the beginning of each of the runs. The simulation for each scenario was run 30 times until each run served $100,000$ calls, not including the calls in the warm-up period. The results were then averaged across the runs. All the averages for the server utilizations had confidence intervals of less than 0.5\% after 30 runs.}
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{RelErrServDist1.pdf}
+%                \caption{A gull}
+                \label{fig:rel_err1}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{RelErrServDist2.pdf}
+%                \caption{A tiger}
+                \label{fig:rel_err2}
+        \end{subfigure}
+        \\
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{RelErrServDist3.pdf}
+%                \caption{A mouse}
+                \label{fig:rel_err3}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{RelErrServDist4.pdf}
+%                \caption{A mouse}
+                \label{fig:rel_err4}
+        \end{subfigure}
+        \caption{The relative error for the server utilizations $r_i$ for sixteen scenarios.}\label{fig:rel_err}
+\end{figure}
+
+
+The relative error for each scenario is shown in Figure
+\ref{fig:rel_err}. All relative errors are below 2\% for the
+first two server distributions. The third server distribution
+has the largest relative errors compared to the other server
+distributions. In particular, the relative error for the
+combination of the third server distribution and probability
+mass function 1 is 5.6\%, which is the largest relative error
+among all the scenarios. The relative error for the fourth
+distribution is less than 2.5\% for all the combinations.
+Except for one of the stations in server distribution 3, the
+rest of the combinations have relatively small errors and are
+consistent with the accuracy of other Hypercube model
+approximations in the literature \citep{Budge-etal-09}; hence,
+the proposed Hypercube model is successful in approximating the
+queueing dynamics of most of the scenarios considered. {\color{blue}Figure \ref{fig:vs_budge} shows a comparison between the approximation errors for the server utilizations computed using the Hypercube model that is presented in this paper and the one computed using the Hypercube model with single server response presented by Budge et al. (2009) when the customer demands are adjusted. The adjustment is done by computing the mean demand using the distribution for the number of requested servers so that the mean rate of server requests are the same in both models. The box plots indicate that the proposed model has substantially lower absolute and relative error levels, thus making it suitable for modeling systems with multiple response.}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.49\textwidth}
+                \includegraphics[width=\textwidth]{AH_vs_Budge_AbsErr.png}
+%                \caption{A gull}
+                \label{fig:rel_err1}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.49\textwidth}
+                \includegraphics[width=\textwidth]{AH_vs_Budge_RelErr.png}
+%                \caption{A tiger}
+                \label{fig:rel_err2}
+        \end{subfigure}
+        \caption{Box plots for the absolute and relative errors for server utilizations $r_i$ computed using the approximate Hypercube model with multiple response proposed in this paper and with single response proposed by Budge et al. (2009)}\label{fig:vs_budge}
+\end{figure}
+
+{The average execution times for the approximation Hypercube
+and simulation models for different combinations of the number
+of servers requested and server distribution were 60.6 seconds
+and 6998.2 seconds, respectively. Table \ref{tbl:exec_times}
+reports the ratio of the execution times for every combination.
+The ratios range from 44.08 to 546.04, indicating that the
+approximate Hypercube model has a much shorter execution time.
+For example, the approximate Hypercube model is 203.31 times
+faster than the simulation model when PMF 1 and Server
+Distribution 1 are used. }
+
+\begin{table}
+\footnotesize \centering \caption{The ratio of the execution times of the simulation model over the approximate Hypercube model for each combination of PMF and server distribution.
+\label{tbl:exec_times}} {\begin{tabular}{c c c c c} \hline
+ \multirow{2}{0.3in}{PMF} & \multicolumn{4}{c}{Server Distribution} \\
+ & 1 & 2 & 3 & 4 \\
+\hline
+1 & 233.03 & 546.04 & 101.15 & 333.39 \\
+2 & 174.11 & 374.29 &  70.62 & 207.09 \\
+3 &  99.85 & 226.47 &  44.08 & 128.17 \\
+4 &  99.48 & 251.85 &  45.59 & 142.62 \\
+\hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{SensitivityOnRho.pdf}
+\caption{The relative error for different levels of $\rho$ for server distribution 2 and probability mass function 2. \label{fig:sensitity_on_rho}}
+\end{figure}
+A sensitivity analysis on the traffic intensity is also
+performed. We use server distribution 2 and probability mass
+function 2 for this analysis, and we vary $\rho$ from 0.1 to
+0.9. The corresponding relative errors are shown in Figure
+\ref{fig:sensitity_on_rho}. The relative error is smaller than
+2\% for all the cases except for station 3 when $\rho=0.1$. The
+relative errors decrease on average as $\rho$ increases, since
+the relative error formula is more sensitive when the values
+for server utilizations are smaller.
+
+\begin{table}
+\footnotesize \centering \caption{The absolute and relative
+errors comparing the server utilizations for the Approximate
+Hypercube (AH) model and the simulation results (Sim) with
+different probability mass functions (PMF) for the number of
+requested servers per call for Hanover County. The stations are
+1:Ashland, 4:Doswell, 6:Henry, 7:Mechanicsville, 8:Montpelier,
+10:Chickahominy, 11:Farrington, 14:East Hanover.
+\label{tbl:hanover_results}} {\begin{tabular}{c l c c c c c c c
+c c} \hline
+ & Station & 1 & 4 & 6 & 7 & 8 & 10 & 11 & 14 & Average \\
+\hline
+ & $s_i$ & 2 & 1 & 1 & 2 & 1 & 1 & 1 & 2 & 1.375 \\
+\hline
+\multirow{4}{0.7in}{PMF 1 ($\rho=0.13$)} & AH $r_i$ & 0.216 & 0.118 & 0.186 & 0.205 & 0.166 & 0.170 & 0.136 & 0.154 & 0.169 \\
+ & Sim $r_i$ & 0.221 & 0.114 & 0.180 & 0.208 & 0.166 & 0.166 & 0.134 & 0.154 & 0.168 \\
+ & Abs. Err. & 0.005 & 0.004 & 0.006 & 0.004 & 0.000 & 0.004 & 0.002 & 0.000 & 0.003 \\
+ & Rel. Err. (\%) & 2.176 & 3.251 & 3.337 & 1.777 & 0.242 & 2.474 & 1.267 & 0.130 & 1.832 \\
+\hline
+\multirow{4}{0.7in}{PMF 2 ($\rho=0.17$)} & AH $r_i$ & 0.274 & 0.170 & 0.239 & 0.254 & 0.186 & 0.234 & 0.189 & 0.213 & 0.220 \\
+ & Sim $r_i$ & 0.280 & 0.166 & 0.231 & 0.259 & 0.181 & 0.230 & 0.184 & 0.217 & 0.218 \\
+ & Abs. Err. & 0.006 & 0.004 & 0.009 & 0.005 & 0.005 & 0.004 & 0.005 & 0.003 & 0.005 \\
+ & Rel. Err. (\%) & 2.109 & 2.598 & 3.729 & 1.890 & 2.936 & 1.607 & 2.776 & 1.524 & 2.396 \\
+\hline
+\multirow{4}{0.7in}{PMF 3 ($\rho=0.24$)} & AH $r_i$ & 0.348 & 0.253 & 0.327 & 0.328 & 0.240 & 0.324 & 0.277 & 0.299 & 0.299 \\
+ & Sim $r_i$ & 0.351 & 0.247 & 0.327 & 0.330 & 0.226 & 0.326 & 0.272 & 0.304 & 0.298 \\
+ & Abs. Error & 0.003 & 0.005 & 0.000 & 0.002 & 0.014 & 0.002 & 0.005 & 0.005 & 0.005 \\
+ & Rel. Error (\%) & 0.769 & 2.183 & 0.061 & 0.697 & 6.142 & 0.583 & 1.691 & 1.742 & 1.733 \\
+\hline
+\multirow{4}{0.7in}{PMF 4 ($\rho=0.32$)} & AH $r_i$ & 0.420 & 0.334 & 0.400 & 0.398 & 0.301 & 0.402 & 0.357 & 0.381 & 0.374 \\
+ & Sim $r_i$ & 0.419 & 0.330 & 0.409 & 0.398 & 0.281 & 0.410 & 0.355 & 0.386 & 0.373 \\
+ & Abs. Error & 0.001 & 0.004 & 0.009 & 0.001 & 0.020 & 0.008 & 0.002 & 0.005 & 0.006 \\
+ & Rel. Error (\%) & 0.263 & 1.364 & 2.151 & 0.201 & 6.970 & 1.878 & 0.592 & 1.323 & 1.843 \\
+\hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{SteadyStateProbs_AbsErr.pdf}
+%                \caption{A gull}
+                \label{fig:steady_state_probs_abs_err}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{SteadyStateProbs_RelErr.pdf}
+%                \caption{A tiger}
+                \label{fig:steady_state_probs_rel_err}
+        \end{subfigure}
+        \caption{The absolute and relative errors for the steady-state probabilities comparing the results of balance equations in Section \ref{sec:steady_state_probs} and the simulation model with different probability mass functions (PMF) for the
+number of requested servers per call for Hanover County.}\label{fig:steady_state_probs}
+\end{figure}
+Next, we use real data from Hanover County, Virginia and
+simulated multiple response. The county has 269 grid locations
+we use as call locations. Historical call data captures call
+arrival rates and service rates. The actual service time
+distribution can be modeled as a mixture of two lognormal
+distributions. The lognormal distributions correspond to calls
+where a patient is and is not transferred to a hospital. The
+probability of hospital transport and the parameters of the
+lognormal distribution are computed based on the historical
+data. We ran four different simulations for the four
+probability mass functions for the number of requested servers
+per call that are shown in Figure \ref{fig:pmfs}, which
+resulted in $\rho$ values of 0.13, 0.17, 0.24 and 0.32,
+computed using (\ref{eq:rho}). We ran each simulation 30 times
+until $100,000$ calls arrived for service in each run. Eleven
+servers were located at eight stations using the output from an
+optimization reported by \citet{Ansari2013} and the optimal
+policy was used in the simulation. The number of servers
+located at each station ($s_i$), the utilizations computed by
+the approximate Hypercube model and the simulation, and the
+absolute and the relative errors are shown in Table
+\ref{tbl:hanover_results}. All absolute errors are smaller than
+0.02 and all the relative errors are smaller than 4\% except
+two cases for the Montpelier station when the third and fourth
+probability mass functions are used. Overall, the average
+absolute and relative errors are approximately 0.005 and 2\%,
+respectively, which is very accurate based on other results
+reported in the literature \citep{Budge-etal-09}.
+%Moreover, the queueing factors seem to be insensitive to the distribution of the service times beyond their mean, which was previously reported in \citet{gross1998fundamentals}.
+
+The balance equations derived in Section
+\ref{sec:steady_state_probs} are used in the iterative
+procedure to compute the steady-state probabilities. These
+probabilities are compared to those obtained from the
+simulation and the errors are depicted in Figure
+\ref{fig:steady_state_probs}. All absolute errors are smaller
+than 0.05\%, and all relative errors are smaller than 1\%
+except for $n=8$, $9$, $10$ and $11$ for probability mass
+function 1. The larger relative errors in these four cases are
+due to few of these cases occurring in the simulation. For
+reference, the values of the steady-state probabilities
+obtained from the simulation are $P_8=0.0033$, $P_9=0.0012$,
+$P_{10}=0.0004$ and $P_{11}=0.0002$. %These are the values that the absolute values are divided by, resulting in large relative errors.
+
+In summary, the computational results indicate that the
+proposed approximate Hypercube model has a relative error of less
+than 2\% in nearly all of the cases, and therefore, the
+Hypercube approximation is sufficiently accurate for evaluating
+the design of public safety systems.
+
+
+
+\section{Conclusions}
+\label{sec:discussions}
+
+In this paper we introduce the $M[G]/M/s/s$ loss model to
+accommodate for policies with multiple response, where $G$
+denotes a general discrete probability distribution for the
+number of requested servers per call. We derive the balance
+equations for this queueing model and find the steady-state
+probabilities. Then, we derive expressions for the server
+utilizations, dispatch probabilities and the correction
+factors. An iterative procedure is presented to compute the
+server utilizations and dispatch probabilities.
+
+We use the $M[G]/M/s/s$ model to extend the approximate
+Hypercube model proposed by \citet{Budge-etal-09} to
+accommodate multiple response when calls for service are
+geographically dispersed on a network. Unlike the previous
+papers in the literature, our model allows for an arbitrary
+number of servers to be dispatched to a single call and it does
+not assume any particular dispatch policy, which makes it more
+general than the previous models. In addition, this model can
+accommodate multiple servers per location.
+
+The results of the proposed approximate Hypercube model are
+validated using discrete event simulation. The results indicate
+that the proposed Hypercube model can approximate the queueing
+dynamics of an emergency system. The relative error between the
+results of the Hypercube model and that of the simulation is
+less than 2\% in nearly all of the cases tested, which
+is comparable to the other Hypercube models.
+%The drawback of this model is that it is computationally more complex than the previous methods. Hence, a revised version of the model which is computationally more efficient would be beneficial.
+The relative error exceeds 5\% in only a few cases. However, this is
+due to very small denominators in the relative error formula in
+some cases that rarely occur. %In other cases, the proposed model needs to be modified to improve the accuracy.
+%In sum, this paper provides a new methodology for evaluating realistic public safety system configurations that is both computationally fast and accurate.
+
+% contribution in terms of a managerial insight
+{\color{blue}
+The proposed model provides an analytical tool to evaluate the performance of public safety systems while lifting simplifying assumptions of single response and a single vehicle per station, two assumptions that are commonly made in the existing literature. The proposed model can be used to evaluate and compare system design alternatives. Additionally, the model could be embedded within an optimization model to identify several ``good'' system design alternatives and then simulation can be used to further evaluate and compare the most promising alternatives \citep{Ansari2013}.
+%
+Assuming only one vehicle per station is restrictive in practice, since it may be necessary to place multiple vehicles at the same station due to high demand or limited access to stations \citep{Budge-etal-09}. Also, many public service systems fall into a category of multiple response, for example, approximately 30\% of the calls require multiple police patrol cars in New York City \citep{green1984multiple}. This research therefore expands the range of systems whose performance can be studied using approximate Hypercube models.
+%
+}
+
+% future study
+{\color{blue}
+The model proposed focuses on the steady-state behavior of the system, but many queueing systems are subject to time-dependent changes in parameters \citep{islam2009time, schwarz2016performance}. Therefore a promising future research topic is to develop a model that can evaluate the performance of nonstationary systems.
+}
+
+
+
+\section{Acknowledgments}
+This work was funded by the National Science Foundation [Awards
+1444219, 1361448]. The views and conclusions contained in this
+document are those of the author and should not be interpreted
+as necessarily representing the official policies, either
+expressed or implied, of the National Science Foundation. The authors would like to thank the anonymous reviewers for their valuable comments and suggestions to improve the quality of the paper.
+
+
+
+\bibliographystyle{apalike}
+\bibliography{hypercube_reference_12292016}
+%\bibliography{ThesisProposalTemplate}
+
+
+\end{document}
